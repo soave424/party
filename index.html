@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>나는 어떤 정당 스타일일까?</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #ecfeff 45%, #eef2ff 100%);
+      color: #1e293b;
+    }
+
+    body {
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 28px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+      overflow: hidden;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+      padding: 26px 22px;
+      backdrop-filter: blur(8px);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: 34px;
+      line-height: 1.2;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #1e293b;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.7;
+      color: #475569;
+    }
+
+    .progress-wrap {
+      margin-bottom: 16px;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #06b6d4, #6366f1);
+      transition: width 0.25s ease;
+    }
+
+    .question-card {
+      padding: 22px;
+      animation: fadeIn 0.22s ease;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .question-title {
+      margin: 0 0 18px;
+      font-size: 28px;
+      line-height: 1.45;
+      font-weight: 800;
+      color: #1e293b;
+      white-space: pre-line;
+    }
+
+    .option-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option-btn {
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      background: #fff;
+      border-radius: 20px;
+      padding: 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .option-btn:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .option-btn.selected {
+      transform: scale(1.01);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .option-number {
+      min-width: 28px;
+      font-size: 26px;
+      font-weight: 800;
+      color: #334155;
+      line-height: 1;
+      padding-top: 2px;
+    }
+
+    .option-text {
+      flex: 1;
+      font-size: 17px;
+      line-height: 1.5;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .option-check {
+      font-size: 20px;
+      padding-top: 2px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 18px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 1.5px solid #cbd5e1;
+      color: #334155;
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: #f8fafc;
+    }
+
+    .btn-primary {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+
+    .result-card {
+      animation: fadeIn 0.28s ease;
+      overflow: hidden;
+    }
+
+    .result-top {
+      padding: 28px 24px;
+    }
+
+    .result-emoji {
+      font-size: 52px;
+      margin-bottom: 10px;
+    }
+
+    .result-small {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    .result-title {
+      margin: 0 0 10px;
+      font-size: 38px;
+      line-height: 1.25;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .result-desc {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.7;
+      max-width: 680px;
+    }
+
+    .result-body {
+      padding: 24px;
+      background: #fff;
+    }
+
+    .quote-box {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 22px;
+    }
+
+    .quote-label {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .quote-text {
+      font-size: 24px;
+      font-weight: 900;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+
+    .score-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #1e293b;
+      margin: 0 0 14px;
+    }
+
+    .score-list {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .score-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .score-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .score-right {
+      font-weight: 900;
+      color: #1e293b;
+    }
+
+    .score-bar {
+      width: 100%;
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .info-box {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .info-box h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #1e293b;
+    }
+
+    .info-box p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #475569;
+      white-space: pre-line;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .theme-a {
+      background: #ffe4e6;
+      color: #be123c;
+      border: 2px solid #fecdd3;
+    }
+
+    .theme-b {
+      background: #fef3c7;
+      color: #b45309;
+      border: 2px solid #fde68a;
+    }
+
+    .theme-c {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 2px solid #bae6fd;
+    }
+
+    .theme-d {
+      background: #dcfce7;
+      color: #047857;
+      border: 2px solid #bbf7d0;
+    }
+
+    .theme-e {
+      background: #ede9fe;
+      color: #6d28d9;
+      border: 2px solid #ddd6fe;
+    }
+
+    .fill-a { background: #f43f5e; }
+    .fill-b { background: #f59e0b; }
+    .fill-c { background: #0ea5e9; }
+    .fill-d { background: #10b981; }
+    .fill-e { background: #8b5cf6; }
+
+    .selected.theme-a,
+    .selected.theme-b,
+    .selected.theme-c,
+    .selected.theme-d,
+    .selected.theme-e {
+      color: inherit;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p,
+      .result-desc {
+        font-size: 16px;
+      }
+
+      .question-title {
+        font-size: 23px;
+      }
+
+      .result-title {
+        font-size: 30px;
+      }
+
+      .quote-text {
+        font-size: 20px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: row;
+      }
+
+      .btn {
+        width: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page {
+        padding: 16px 12px 32px;
+      }
+
+      .hero,
+      .question-card,
+      .result-top,
+      .result-body {
+        padding: 18px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .option-text {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card hero">
+      <div class="eyebrow">✨ 살기 좋은 우리 반을 위한 정당 찾기</div>
+      <h1>나는 어떤 정당 스타일일까?</h1>
+      <p>
+        나의 선택으로 내가 중요하게 생각하는 가치를 알아보아요.<br>
+        질문을 읽고 <strong>가장 마음이 끌리는 보기</strong>를 하나씩 눌러 보세요.
+      </p>
+    </div>
+
+    <div id="progressSection" class="progress-wrap">
+      <div class="progress-labels">
+        <span id="progressText">1 / 8 문항</span>
+        <span id="progressPercent">0% 진행</span>
+      </div>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="app"></div>
+  </div>
+
+  <script>
+    const parties = {
+      A: {
+        key: "A",
+        name: "관계·공존 정당",
+        emoji: "🤝",
+        theme: "theme-a",
+        fill: "fill-a",
+        desc: "친구들과 사이좋게 지내고, 서로 도우며 함께 웃는 반을 중요하게 생각해요.",
+        slogan: "함께라서 더 좋은 우리 반!",
+        role: "친구 챙기기, 갈등 중재, 함께하는 활동 제안"
+      },
+      B: {
+        key: "B",
+        name: "문화·즐거움 정당",
+        emoji: "🎉",
+        theme: "theme-b",
+        fill: "fill-b",
+        desc: "재미있는 활동, 축제, 체육, 취미처럼 신나고 활기찬 학교생활을 중요하게 생각해요.",
+        slogan: "즐거움이 살아있는 우리 반!",
+        role: "축제 기획, 분위기 살리기, 즐거운 아이디어 내기"
+      },
+      C: {
+        key: "C",
+        name: "성장·미래 정당",
+        emoji: "🚀",
+        theme: "theme-c",
+        fill: "fill-c",
+        desc: "배움, 도전, 실력 키우기처럼 스스로 성장하는 기회를 중요하게 생각해요.",
+        slogan: "오늘보다 내일 더 성장하는 우리 반!",
+        role: "학습 도우미, 프로젝트 기획, 새로운 방법 찾기"
+      },
+      D: {
+        key: "D",
+        name: "안전·지속가능 정당",
+        emoji: "🌿",
+        theme: "theme-d",
+        fill: "fill-d",
+        desc: "다치지 않는 환경, 건강한 교실, 깨끗한 공간처럼 모두가 편안한 반을 중요하게 생각해요.",
+        slogan: "안전하고 건강한 우리 반!",
+        role: "안전 점검, 환경 지키기, 건강한 교실 만들기"
+      },
+      E: {
+        key: "E",
+        name: "공정·질서 정당",
+        emoji: "⚖️",
+        theme: "theme-e",
+        fill: "fill-e",
+        desc: "규칙이 공평하게 지켜지고, 모두에게 같은 기준이 적용되는 반을 중요하게 생각해요.",
+        slogan: "약속이 지켜지는 우리 반!",
+        role: "규칙 정리, 공정한 기준 세우기, 약속 점검"
+      }
+    };
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    const questions = [
+      {
+        id: 1,
+        title: "뉴스를 본다면 어떤 이야기에 제일 눈길이 갈까요?",
+        options: shuffle([
+          { text: "친구들 사이에 갈등이 생겼다는 이야기", type: "A" },
+          { text: "유명한 사람이 즐거운 소식을 전하는 이야기", type: "B" },
+          { text: "새로운 직업이나 꿈을 소개하는 이야기", type: "C" },
+          { text: "사고나 위험한 상황이 발생한 이야기", type: "D" },
+          { text: "약속을 지키지 않아 문제가 생긴 이야기", type: "E" }
+        ])
+      },
+      {
+        id: 2,
+        title: "새로운 채널이 생긴다면 무엇이 가장 궁금할까요?",
+        options: shuffle([
+          { text: "사람이나 동물과 함께하는 따뜻한 이야기", type: "A" },
+          { text: "취미나 재미있는 활동을 보여주는 채널", type: "B" },
+          { text: "공부나 새로운 지식을 쉽게 알려주는 채널", type: "C" },
+          { text: "건강하고 안전하게 생활하는 방법을 알려주는 채널", type: "D" },
+          { text: "상황을 비교하고 판단하는 내용을 다루는 채널", type: "E" }
+        ])
+      },
+      {
+        id: 3,
+        title: "여행을 갔을 때 가장 아쉬울 것 같은 상황은?",
+        options: shuffle([
+          { text: "같이 간 친구와 어색해지는 순간", type: "A" },
+          { text: "생각보다 재미가 없는 여행", type: "B" },
+          { text: "새롭게 해볼 것이 없는 여행", type: "C" },
+          { text: "불편하거나 걱정되는 환경", type: "D" },
+          { text: "정해둔 계획이 잘 지켜지지 않는 상황", type: "E" }
+        ])
+      },
+      {
+        id: 4,
+        title: "다음 중 가장 끌리는 영화는?",
+        options: shuffle([
+          { text: "친구와의 관계가 깊어지는 이야기", type: "A" },
+          { text: "웃고 즐길 수 있는 모험 이야기", type: "B" },
+          { text: "주인공이 점점 변화하는 이야기", type: "C" },
+          { text: "위기 속에서 사람들을 지켜내는 이야기", type: "D" },
+          { text: "옳고 그름을 고민하게 만드는 이야기", type: "E" }
+        ])
+      },
+      {
+        id: 5,
+        title: "내가 해보고 싶은 학교 활동은?",
+        options: shuffle([
+          { text: "친구를 도와주거나 함께 활동하기", type: "A" },
+          { text: "행사나 재미있는 활동을 준비하기", type: "B" },
+          { text: "무언가를 배우거나 만들어보기", type: "C" },
+          { text: "안전하고 쾌적한 환경 만들기", type: "D" },
+          { text: "모두가 지킬 수 있는 약속 만들기", type: "E" }
+        ])
+      },
+      {
+        id: 6,
+        title: "우리 학교에 가장 먼저 생기면 좋을 것은?",
+        options: shuffle([
+          { text: "편하게 이야기할 수 있는 공간", type: "A" },
+          { text: "즐겁게 놀 수 있는 시설", type: "B" },
+          { text: "배움을 도와주는 도구", type: "C" },
+          { text: "건강과 안전을 위한 시설", type: "D" },
+          { text: "공평하게 운영되는 규칙 시스템", type: "E" }
+        ])
+      },
+      {
+        id: 7,
+        title: "게임 캐릭터를 고른다면?",
+        options: shuffle([
+          { text: "친구들과 잘 어울리는 캐릭터", type: "A" },
+          { text: "눈에 띄고 멋있는 캐릭터", type: "B" },
+          { text: "점점 성장하는 캐릭터", type: "C" },
+          { text: "오래 버티고 안정적인 캐릭터", type: "D" },
+          { text: "균형 잡힌 능력을 가진 캐릭터", type: "E" }
+        ])
+      },
+      {
+        id: 8,
+        title: "우리 반에 필요하다고 생각하는 것은?",
+        options: shuffle([
+          { text: "서로를 더 이해하는 시간", type: "A" },
+          { text: "즐겁게 활동하는 기회", type: "B" },
+          { text: "배움을 더 재미있게 만드는 방법", type: "C" },
+          { text: "위험하지 않은 생활 환경", type: "D" },
+          { text: "모두에게 같은 기준이 적용되는 규칙", type: "E" }
+        ])
+      }
+    ];
+
+    const state = {
+      step: 0,
+      answers: [],
+      selected: null
+    };
+
+    function getScores() {
+      const base = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+      state.answers.forEach(type => {
+        base[type] += 1;
+      });
+      return base;
+    }
+
+    function getResultKey(scores) {
+      const entries = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+      const topScore = entries[0][1];
+      const winners = entries.filter(([, score]) => score === topScore);
+      return winners[0][0];
+    }
+
+    function updateProgress() {
+      const progressSection = document.getElementById("progressSection");
+      const progressText = document.getElementById("progressText");
+      const progressPercent = document.getElementById("progressPercent");
+      const progressFill = document.getElementById("progressFill");
+
+      const isFinished = state.step >= questions.length;
+      const progress = (state.answers.length / questions.length) * 100;
+
+      if (isFinished) {
+        progressSection.style.display = "none";
+      } else {
+        progressSection.style.display = "block";
+        progressText.textContent = `${state.step + 1} / ${questions.length} 문항`;
+        progressPercent.textContent = `${Math.round(progress)}% 진행`;
+        progressFill.style.width = `${progress}%`;
+      }
+    }
+
+    function renderQuestion() {
+      const app = document.getElementById("app");
+      const question = questions[state.step];
+
+      app.innerHTML = `
+        <div class="card question-card">
+          <div class="badge">질문 ${question.id}</div>
+          <h2 class="question-title">${question.title.replace(/\n/g, "<br>")}</h2>
+          <div class="option-list">
+            ${question.options.map((option, idx) => {
+              const selected = state.selected === option.type;
+              const party = parties[option.type];
+              return `
+                <button class="option-btn ${selected ? `selected ${party.theme}` : ""}" data-type="${option.type}">
+                  <div class="option-number">${idx + 1}</div>
+                  <div class="option-text">${option.text}</div>
+                  <div class="option-check">${selected ? "✅" : ""}</div>
+                </button>
+              `;
+            }).join("")}
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-outline" id="prevBtn" ${state.step === 0 ? "disabled" : ""}>← 이전으로</button>
+            <button class="btn btn-primary" id="nextBtn" ${!state.selected ? "disabled" : ""}>다음으로 →</button>
+          </div>
+        </div>
+      `;
+
+      app.querySelectorAll(".option-btn").forEach(button => {
+        button.addEventListener("click", () => {
+          state.selected = button.dataset.type;
+          render();
+        });
+      });
+
+      document.getElementById("prevBtn").addEventListener("click", handlePrev);
+      document.getElementById("nextBtn").addEventListener("click", handleNext);
+    }
+
+    function renderResult() {
+      const app = document.getElementById("app");
+      const scores = getScores();
+      const resultKey = getResultKey(scores);
+      const result = parties[resultKey];
+
+      const scoreHtml = Object.entries(scores)
+        .sort((a, b) => b[1] - a[1])
+        .map(([key, score]) => {
+          const item = parties[key];
+          const width = (score / questions.length) * 100;
+          return `
+            <div>
+              <div class="score-item-top">
+                <div class="score-left">
+                  <span>${item.emoji}</span>
+                  <span>${item.name}</span>
+                </div>
+                <div class="score-right">${score}점</div>
+              </div>
+              <div class="score-bar">
+                <div class="score-fill ${item.fill}" style="width: ${width}%"></div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      app.innerHTML = `
+        <div class="card result-card">
+          <div class="result-top ${result.theme}">
+            <div class="result-emoji">${result.emoji}</div>
+            <div class="result-small">테스트 결과</div>
+            <h2 class="result-title">당신은 ${result.name}!</h2>
+            <p class="result-desc">${result.desc}</p>
+          </div>
+
+          <div class="result-body">
+            <div class="quote-box">
+              <div class="quote-label">우리 정당의 한마디</div>
+              <div class="quote-text">“${result.slogan}”</div>
+            </div>
+
+            <h3 class="score-title">나의 정당 점수</h3>
+            <div class="score-list">${scoreHtml}</div>
+
+            <div class="info-grid">
+              <div class="info-box">
+                <h3>이런 역할이 잘 어울려요</h3>
+                <p>${result.role}</p>
+              </div>
+              <div class="info-box">
+                <h3>정당 만들기 질문</h3>
+                <p>우리 반에서 가장 먼저 바꾸고 싶은 것은 무엇인가요?
+왜 그것이 중요하다고 생각하나요?</p>
+              </div>
+            </div>
+
+            <div class="result-actions">
+              <button class="btn btn-outline" id="restartBtn">↺ 다시 해보기</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("restartBtn").addEventListener("click", handleRestart);
+    }
+
+    function handleNext() {
+      if (!state.selected) return;
+      state.answers.push(state.selected);
+      state.selected = null;
+      state.step += 1;
+      render();
+    }
+
+    function handlePrev() {
+      if (state.step === 0) return;
+      const prevSelected = state.answers[state.step - 1];
+      state.answers = state.answers.slice(0, -1);
+      state.step -= 1;
+      state.selected = prevSelected;
+      render();
+    }
+
+    function handleRestart() {
+      state.step = 0;
+      state.answers = [];
+      state.selected = null;
+
+      questions.forEach(question => {
+        question.options = shuffle(question.options);
+      });
+
+      render();
+    }
+
+    function render() {
+      updateProgress();
+
+      if (state.step >= questions.length) {
+        renderResult();
+      } else {
+        renderQuestion();
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>
